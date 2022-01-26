@@ -34,7 +34,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
     Accueil(),
-    J_V(),
+    j_v(),
     Manga(),
     Favoris(),
     Info(),
