@@ -6,7 +6,6 @@ import './j_v.dart';
 import './manga.dart';
 import './favoris.dart';
 import './informations.dart';
-
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
