@@ -73,10 +73,20 @@ class j_v extends StatelessWidget{
                   IconButton(
                     icon:Icon(
                       Icons.favorite,
-                      color:Colors.red),
+
+                      color:_saved.contains(_list[index]) ? Colors.red : null,
+
+                    ),
                     onPressed: (){
-                      _saved.add(_list[index]);
-                      print(_saved.length);
+                      if(_saved.contains(_list[index])){
+                        _saved.remove(_list[index]);
+                        print(_saved.length);
+
+                      }
+                      else {
+                        _saved.add(_list[index]);
+                        print(_saved.length);
+                      }
                     }
                   ),
                 ],
