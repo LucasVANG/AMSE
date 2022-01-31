@@ -6,7 +6,7 @@ class Accueil extends StatelessWidget{
     Widget build(BuildContext context){
       return Container(
         padding:EdgeInsets.all(25.0),
-        child:Text('4455', style: TextStyle(fontSize: 36.0)),
+        child:Text("Bienvenue sur la page d'accueil de l'application", style: TextStyle(fontSize: 20.0),textAlign: TextAlign.center,),
       );
     }
 }

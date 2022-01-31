@@ -33,13 +33,14 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
     Accueil(),
-    j_v(),
+    J_v(),
     Manga(),
     Favoris(),
     Info(),
   ];
 
   void _onItemTapped(int index) {
+    //print(_list[0]);
     setState(() {
       _selectedIndex = index;
     });
@@ -49,7 +50,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BottomNavigationBar Sample'),
+        title: const Text('Application tp1'),
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),

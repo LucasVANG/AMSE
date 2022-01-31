@@ -6,7 +6,7 @@ class Info extends StatelessWidget{
     Widget build(BuildContext context){
       return Container(
         padding:EdgeInsets.all(25.0),
-        child:Text('inf', style: TextStyle(fontSize: 36.0)),
+        child:Text('Cette application a été réalisé par Lucas Vangaeveren', style: TextStyle(fontSize: 25.0) ,textAlign: TextAlign.center,),
       );
     }
 }
