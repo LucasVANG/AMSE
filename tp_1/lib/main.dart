@@ -7,6 +7,7 @@ import './manga.dart';
 import './favoris.dart';
 import './informations.dart';
 
+
 void main() => runApp(const MyApp());
 
 
@@ -33,9 +34,9 @@ class MyStatefulWidget extends StatefulWidget {
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
-  static List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     Accueil(),
-    J_v(),
+    const JeuxVideoPage(),
     Manga(),
     Favoris(),
     Info(),
