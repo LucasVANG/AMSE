@@ -1,4 +1,4 @@
-import 'listemedia.dart';
+import 'ressources.dart';
 
 import 'package:flutter/material.dart';
 
@@ -14,7 +14,7 @@ class JeuxVideoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ListeMedia.fromMedia(listemed),
+      home: ListeMedia.fromMedia(filtrage('Jeux-Videos')),
     );
   }
 

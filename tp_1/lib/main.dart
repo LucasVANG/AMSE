@@ -14,7 +14,7 @@ void main() => runApp(const MyApp());
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  static const String _title = 'Flutter Code Sample';
+  static const String _title = 'Application tp1';
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +37,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   static final List<Widget> _widgetOptions = <Widget>[
     Accueil(),
     const JeuxVideoPage(),
-    Manga(),
-    Favoris(),
+    const MangaPage(),
+    const FavorisPage(),
     Info(),
   ];
 
@@ -62,7 +62,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             label: 'Accueil',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.watch_later),
+            icon: Icon(Icons.gamepad),
             label: 'Jeux-Videos',
           ),
           BottomNavigationBarItem(

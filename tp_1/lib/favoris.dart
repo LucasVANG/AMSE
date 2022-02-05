@@ -1,12 +1,22 @@
+import 'ressources.dart';
+
 import 'package:flutter/material.dart';
 
 
-class Favoris extends StatelessWidget{
+
+
+
+
+class FavorisPage extends StatelessWidget {
+  const FavorisPage({Key? key}) : super(key: key);
+
+  // #docregion build
   @override
-    Widget build(BuildContext context){
-      return Container(
-        padding:EdgeInsets.all(25.0),
-        child:Text('fav', style: TextStyle(fontSize: 36.0)),
-      );
-    }
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: ListeMedia.fromMedia(filtrage_liked(listemed)),
+    );
+  }
+
+ 
 }
