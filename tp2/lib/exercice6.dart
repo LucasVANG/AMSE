@@ -1,108 +1,63 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
+
+class Tile {
+  Color? color;
+  Tile(this.color);
+  Tile.randomColor() {
+    color = Color.fromARGB(
+        255, Random().nextInt(255), Random().nextInt(255), Random().nextInt(255));
+  }
+}
+
+class TileWidget extends StatelessWidget {
+  const TileWidget({Key? key, required this.tile}) : super(key: key);
+  final Tile tile;
+  
+  @override
+  Widget build(BuildContext context) {
+    return coloredBox();
+  }
+
+  Widget coloredBox() {
+    return Container(
+      color: tile.color,
+      child: const Padding(
+        padding: EdgeInsets.all(70.0),
+      )
+    );
+  }
+}
 
 class Exercice6 extends StatefulWidget {
-  const Exercice6({Key? key,required this.title}) : super(key: key);
-  final String title;
+  const Exercice6({Key? key,}) : super(key: key);
   @override
   State<Exercice6> createState() => _Exercice6State();
 }
-class ImageTile extends StatelessWidget{
-    String imageURL;
-    Alignment alignment;
-    double rapport;
-    ImageTile({Key? key, required this.alignment,required this.imageURL,required this.rapport}) : super(key: key);
-    
-    @override
-    Widget build(BuildContext context){
-        return FittedBox(
-            fit: BoxFit.fill,
-            child: ClipRect(
-                child: Container(
-                child: Align(
-                    alignment: this.alignment,
-                    widthFactor: rapport,
-                    heightFactor: rapport,
-                    child: Image.network(this.imageURL),
-                ),
-                ),
-            ),
-        );
-    }
-}
-class _Exercice6State extends State<Exercice6> {
-    double nbdiv = 3;
-    List<ImageTile> tiles=[];
-    int indexactu=2;
-    bool playing=false;
 
-    Widget createTileWidgetFrom(ImageTile tile,int i) {
-    return InkWell(
-      child: tile,
-      onTap: () {
-        print("tapped on tile $i");
-        setState(() {
-            this.tiles[i]==this.tiles[i-1];
-   
-        });
-      },
-    );
-  }
-    
-    @override
+
+class _Exercice6State extends State<Exercice6> {
+  List<Widget> tiles =
+      List<Widget>.generate(2, (index) => TileWidget(tile: Tile.randomColor(),));
+
+  @override
   Widget build(BuildContext context) {
-      actuListeTiles();
-    
     return Scaffold(
       appBar: AppBar(
-   
-        title: Text(widget.title),
+        title: Text('Moving Tiles'),
+        centerTitle: true,
       ),
-      body: Center(
-        child:
-        Column(
-            children:<Widget>[
-              Slider(
-                value: nbdiv,
-                min: 2,
-                max: 6,
-                divisions: 4,
-                label: nbdiv.round().toString(),
-                onChanged: (double value) {
-                  setState(() {
-                    nbdiv = value;
-                  });
-                }
-              ),
-              Expanded(
-               
-                child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: nbdiv.toInt()),
-                    itemCount: (nbdiv*nbdiv).toInt(),
-
-                    itemBuilder:(context,index){
-                        return createTileWidgetFrom(tiles[index],index);
-                    }
-                            
-                    
-                    )
-                )
-            ]
-        )
-      ) 
+      body: Row(children: tiles),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.sentiment_very_satisfied), onPressed: swapTiles),
     );
   }
-  actuListeTiles(){
-      tiles=[];
-      if (this.playing==false){
-        for (int i=0;i<nbdiv;i++){
-            for (int j=0;j<nbdiv;j++){
-                tiles.add(ImageTile(alignment:Alignment(-1+2*j/(nbdiv-1),-1+2*i/(nbdiv-1)),imageURL:'https://picsum.photos/512',rapport:1/nbdiv));
 
-            }
-        }
-      }
-
+  swapTiles() {
+    setState(() {
+      tiles.insert(1, tiles.removeAt(0));
+    });
   }
-
-
 }
+
+

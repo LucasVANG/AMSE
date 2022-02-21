@@ -6,6 +6,7 @@ import 'exercice5.dart';
 import 'exercice5_2.dart';
 import 'exercice5_3.dart';
 import 'exercice6.dart';
+import 'exercice6_2.dart';
 
 
 class Exercise {
@@ -93,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.push(
                   context, 
                   MaterialPageRoute(
-                    builder: (context) => Exercice6(title: 'Flutter Demo Home Page')
+                    builder: (context) => Exercice6_2(title: "test")
                   ),
                 );
                
