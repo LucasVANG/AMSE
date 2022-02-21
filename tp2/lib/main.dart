@@ -1,7 +1,28 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
+import 'exercice1.dart';
+import 'exercice2.dart';
+import 'exercice4.dart';
+import 'exercice5.dart';
+import 'exercice5_2.dart';
+import 'exercice5_3.dart';
+import 'exercice6.dart';
 
 
+class Exercise {
+  final String title;
+  final String number;
+  const Exercise(this.title, this.number);
+}
+const List<Exercise> exercises = [
+  Exercise("Simple image", "1"),
+  Exercise("Transformer une image", "2"),
+  Exercise("Affichage d'une tuile", "4"),
+  Exercise("Plateau de tuiles", "5"),
+  Exercise("Image découpée", "5_2"),
+  Exercise("Plateau variable", "5_3"),
+  Exercise("Animer un plateau", "6"),
+  Exercise("Taquin", "7"),
+];
 
 void main() {
   runApp(const MyApp());
@@ -51,73 +72,40 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  double _currentSliderValueZ = 0;
-  double _currentSliderValueX = 0;
-  
 
   @override
   Widget build(BuildContext context) {
-    
+    final double cWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-   
         title: Text(widget.title),
       ),
-      body: Center(
-        child:
-        Container(
-          color: Colors.black,
-          child:
-          Column(
-            children:<Widget>[
-              Expanded (
-                child:
-                  Container(
-                    color: Colors.black,
-                    child:
-                     Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.skewY(0)..rotateZ(-_currentSliderValueZ*math.pi / 24.0),
-                      
-                      child:
-                        Transform(
-                          alignment: Alignment.center,
-                          transform: Matrix4.skewY(0)..rotateX(-_currentSliderValueX*math.pi / 24.0),
-                          
-                          child:Image.network('https://picsum.photos/512/1024'),
-          
-                        ),
-                    ),
+      body: ListView.builder(
+        padding: const EdgeInsets.only(top:5,bottom:5),
+        itemCount: exercises.length,
+        itemBuilder: (context, index){
+          return Card(
+            child: ListTile(
+              leading: Text(exercises[index].number),
+              title: Text(exercises[index].title),
+              trailing: const Icon(Icons.arrow_forward_ios_rounded,),
+              onTap:(){
+                  Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                    builder: (context) => Exercice6(title: 'Flutter Demo Home Page')
                   ),
-              ),
-              Slider(
-                value: _currentSliderValueZ,
-                max: 100,
-                divisions: 100,
-                label: _currentSliderValueZ.round().toString(),
-                onChanged: (double value) {
-                  setState(() {
-                    _currentSliderValueZ = value;
-                  });
-                }
-              ),
-              Slider(
-                value: _currentSliderValueX,
-                max: 100,
-                divisions: 100,
-                label: _currentSliderValueX.round().toString(),
-                onChanged: (double value) {
-                  setState(() {
-                    _currentSliderValueX = value;
-                  });
-                }
-              )
-
-              
-            ]
-          )
-        ),
-      ) 
+                );
+               
+              },
+            ),
+          );
+        },
+      ),
+      
+      bottomNavigationBar: BottomAppBar(
+        child: SizedBox(height: cWidth*0.10),
+      ),
     );
   }
 }
