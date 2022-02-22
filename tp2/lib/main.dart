@@ -7,6 +7,7 @@ import 'exercice5_2.dart';
 import 'exercice5_3.dart';
 import 'exercice6.dart';
 import 'exercice6_2.dart';
+import 'final.dart';
 
 
 class Exercise {
@@ -22,7 +23,7 @@ const List<Exercise> exercises = [
   Exercise("Image découpée", "5_2"),
   Exercise("Plateau variable", "5_3"),
   Exercise("Animer un plateau", "6"),
-  Exercise("Taquin", "7"),
+  Exercise("Inverser des cases","6_2"),
 ];
 
 void main() {
@@ -94,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.push(
                   context, 
                   MaterialPageRoute(
-                    builder: (context) => Exercice6_2(title: "test")
+                    builder: (context) => Exercice7(title: "test")
                   ),
                 );
                
