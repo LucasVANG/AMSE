@@ -56,15 +56,17 @@ class _Exercice7State extends State<Exercice7>{
     int indexactif=4;
     int lastIndexactif=4;
     List<Tile> tiles=[];
+    List<Tile> solvedTiles=[];
+    int solvedIndex=-1;
     int nbMouvChoix=3;
+    int nbMouvFait=0;
+    bool reversed=false;
+    int flagReverse=0;
     @override
     Widget build(BuildContext context){
         actuListeTiles();
         return Scaffold(
-            appBar: AppBar(
-        
-                title: Text(widget.title),
-            ),
+            appBar: topBar(),
             body: 
             Center(
                 child: Column(
@@ -84,7 +86,9 @@ class _Exercice7State extends State<Exercice7>{
                                             ),
                                             onTap:(){
                                                 setState((){
-                                                    if (playing) echange(index);
+                                                    if (playing)echange(index);
+                                                    if(jeuFini())playing=false;
+                                                    
 
                                                 });
                                             },
@@ -150,6 +154,20 @@ class _Exercice7State extends State<Exercice7>{
             tiles[i]=tmp;
             this.lastIndexactif=indexactif;
             this.indexactif=i;
+            if(flagReverse==1 && !reversed){
+                nbMouvFait--;
+                reversed=true;
+                
+            }
+            else if(flagReverse==1 && reversed){
+                reversed=false;
+                nbMouvFait++;
+
+            }
+            else{
+                nbMouvFait++;
+                reversed=false;
+            }
         }
     }
     void shuffle(){
@@ -168,8 +186,109 @@ class _Exercice7State extends State<Exercice7>{
 
     }
     void reverse(){
+        flagReverse=1;
         actuListeTiles();
         echange(lastIndexactif);
+        flagReverse=0;
+
+    }
+
+    bool jeuFini(){
+        if(indexactif==solvedIndex){
+            if(tiles==solvedTiles){
+                print("oui");
+                return true;
+            }
+        }
+        
+        print("non");
+        return false;
+    }
+    Text titleTopBar(){
+
+        if(!playing){
+            return Text('Jeu de Taquin');
+        }
+        else{
+            return Text("Nombre de mouvements faits = $nbMouvFait");
+        }
+    }
+
+    AppBar topBar(){
+        return 
+        AppBar(
+            title: titleTopBar(),
+            centerTitle: true,
+            actions: 
+            <Widget>[
+                if (!playing)Center(
+                    child:Row(
+                        children:<Widget>[
+                            Column(
+                                children:<Widget>[
+                                    Text("10"),
+                                    IconButton(
+                                        icon: const Icon(Icons.remove),
+                                        tooltip: 'remove 10',
+                                        onPressed: () {
+                                            setState((){
+                                                if(nbMouvChoix>10){
+                                                    nbMouvChoix=nbMouvChoix-10;
+                                                }
+                                            });
+                                        
+                                        },
+                                    ),
+                                ]
+                            ),
+                            IconButton(
+                                icon: const Icon(Icons.remove),
+                                tooltip: 'remove 1',
+                                onPressed: () {
+                                    setState((){
+                                        if(nbMouvChoix>1){
+                                        nbMouvChoix--; 
+                                        }
+                                    });
+                                
+                                },
+                            ),
+                            Column(
+                                children:<Widget>[
+                                    Text("Nombre de mélanges"),
+                                    Text("$nbMouvChoix"),
+                                ]
+                            ),
+                            IconButton(
+                                icon: const Icon(Icons.add_outlined),
+                                tooltip: 'add 1',
+                                onPressed: () {
+                                    setState((){
+                                        nbMouvChoix++;
+                                    });
+                                
+                                },
+                            ),
+                            Column(
+                                children:<Widget>[
+                                    Text("10"),
+                                    IconButton(
+                                        icon: const Icon(Icons.add_outlined),
+                                        tooltip: 'add 10',
+                                        onPressed: () {
+                                            setState((){
+                                                nbMouvChoix=nbMouvChoix+10;
+                                            });
+                                        
+                                        },
+                                    ),
+                                ]
+                            ),
+                        ]
+                    )
+                )
+            ],
+        );
     }
     
     Widget bottomBar(){
@@ -205,8 +324,13 @@ class _Exercice7State extends State<Exercice7>{
                                     onPressed: () {
                                         setState(() {
                                             playing=true;
+                                            
+                                            solvedIndex=indexactif;
+                                            solvedTiles=tiles;
                                             shuffle();
+                                            nbMouvFait=0;
                                             actuListeTiles();
+                                            print(solvedIndex);
                                         });
                                     },
                                     label: const Text('Jouer'),
@@ -249,6 +373,7 @@ class _Exercice7State extends State<Exercice7>{
                                         setState(() {
                                             tiles.clear();
                                             indexactif=nbdiv;
+                                            nbMouvFait=0;
                                             playing=false;
                                         });
                                     },
