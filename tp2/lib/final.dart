@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
+import 'dart:math' ;
 
 class Exercice7 extends StatefulWidget {
   const Exercice7({Key? key,required this.title}) : super(key: key);
@@ -50,9 +50,13 @@ class TileWidget extends StatelessWidget{
     }
 }
 class _Exercice7State extends State<Exercice7>{
+
+    bool playing=false;
     int nbdiv=4;
     int indexactif=4;
+    int lastIndexactif=4;
     List<Tile> tiles=[];
+    int nbMouvChoix=3;
     @override
     Widget build(BuildContext context){
         actuListeTiles();
@@ -63,29 +67,39 @@ class _Exercice7State extends State<Exercice7>{
             ),
             body: 
             Center(
-                child: Container(
-                    padding: const EdgeInsets.all(10),
-                    child:GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:nbdiv),
-                        itemCount: tiles.length,
-                        itemBuilder:(context,index){
-                            return InkWell(
-                                child:Container(
-                                    padding:const EdgeInsets.all(1),
-                                    child:TileWidget(tile:tiles[index]),
-                                ),
-                                onTap:(){
-                                    setState((){
-                                        echange(index);
+                child: Column(
+                    children:<Widget>[
+                            Expanded(
+                                child:
+                                Container(
+                                padding: const EdgeInsets.all(10),
+                                child:GridView.builder(
+                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:nbdiv),
+                                    itemCount: tiles.length,
+                                    itemBuilder:(context,index){
+                                        return InkWell(
+                                            child:Container(
+                                                padding:const EdgeInsets.all(1),
+                                                child:TileWidget(tile:tiles[index]),
+                                            ),
+                                            onTap:(){
+                                                setState((){
+                                                    if (playing) echange(index);
 
-                                    });
-                                },
-                            );
-                        }
-                    )
+                                                });
+                                            },
+                                        );
+                                    }
+                                )
+                            )
+                        ),
+                        
+                    ]
                 )
                 
-            )
+            ),
+            bottomNavigationBar:bottomBar()
+            
         );
     }
 
@@ -134,7 +148,123 @@ class _Exercice7State extends State<Exercice7>{
             Tile tmp=tiles[indexactif];
             tiles[indexactif]=tiles[i];
             tiles[i]=tmp;
-            indexactif=i;
+            this.lastIndexactif=indexactif;
+            this.indexactif=i;
         }
     }
+    void shuffle(){
+        tiles = [];
+        int nbMelanges=nbMouvChoix;
+        while(nbMelanges!=0){
+        actuListeTiles();
+        int nextTile = Random().nextInt(nbdiv*nbdiv);
+        if(switchable(nextTile) ){
+            echange(nextTile);
+            indexactif = nextTile;
+            nbMelanges--;
+            }
+        }
+        
+
+    }
+    void reverse(){
+        actuListeTiles();
+        echange(lastIndexactif);
+    }
+    
+    Widget bottomBar(){
+        return BottomAppBar(
+            
+            child:Container(
+                padding: const EdgeInsets.all(4),
+               
+                
+                child:Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:<Widget>[
+                        if (!playing) Expanded(child:
+                            Container(child:
+                                FloatingActionButton.extended(
+                                    onPressed: () {
+                                        setState(() {
+                                            if(nbdiv>2){
+                                                tiles.clear();
+                                                nbdiv--;
+                                                indexactif=nbdiv;
+                                            }
+                                        });
+                                    },
+                                    label: const Text('-'),
+                                    backgroundColor: Colors.blue,
+                                )
+                            )
+                        ),
+                        if (!playing)Expanded(child:
+                            Container(child:
+                                FloatingActionButton.extended(
+                                    onPressed: () {
+                                        setState(() {
+                                            playing=true;
+                                            shuffle();
+                                            actuListeTiles();
+                                        });
+                                    },
+                                    label: const Text('Jouer'),
+                                    backgroundColor: Colors.blue,
+                                )
+                            )
+                        ),
+                        if (!playing)Expanded(child:
+                            Container(child:
+                                FloatingActionButton.extended(
+                                    onPressed: () {
+                                        setState(() {
+                                            tiles.clear();
+                                            nbdiv++;
+                                            indexactif=nbdiv;
+                                        });
+                                    },
+                                    label: const Text('+'),
+                                    backgroundColor: Colors.blue,
+                                )
+                            )
+                        ),
+                        if (playing)Expanded(child:
+                            Container(child:
+                                FloatingActionButton.extended(
+                                    onPressed: () {
+                                        setState(() {
+                                            reverse();
+                                        });
+                                    },
+                                    label: const Text('Reverse'),
+                                    backgroundColor: Colors.blue,
+                                )
+                            )
+                        ),
+                        if (playing)Expanded(child:
+                            Container(child:
+                                FloatingActionButton.extended(
+                                    onPressed: () {
+                                        setState(() {
+                                            tiles.clear();
+                                            indexactif=nbdiv;
+                                            playing=false;
+                                        });
+                                    },
+                                    label: const Text('Retour à la selection'),
+                                    backgroundColor: Colors.blue,
+                                )
+                            )
+                        )
+                        
+                    ]
+                )
+            )
+        );
+                
+               
+    }
 }
+
+
