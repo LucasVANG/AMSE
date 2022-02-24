@@ -30,7 +30,8 @@ class TileWidget extends StatelessWidget {
 }
 
 class Exercice6 extends StatefulWidget {
-  const Exercice6({Key? key,}) : super(key: key);
+  const Exercice6({Key? key, required this.title}) : super(key: key);
+  final String title;
   @override
   State<Exercice6> createState() => _Exercice6State();
 }
@@ -44,7 +45,7 @@ class _Exercice6State extends State<Exercice6> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Moving Tiles'),
+        title: Text(widget.title),
         centerTitle: true,
       ),
       body: Row(children: tiles),

@@ -10,22 +10,49 @@ import 'exercice6_2.dart';
 import 'final.dart';
 
 
-class Exercise {
-  final String title;
-  final String number;
-  const Exercise(this.title, this.number);
+class Exercice {
+  final String titre;
+  final String numero;
+  const Exercice(this.titre, this.numero);
 }
-const List<Exercise> exercises = [
-  Exercise("Simple image", "1"),
-  Exercise("Transformer une image", "2"),
-  Exercise("Affichage d'une tuile", "4"),
-  Exercise("Plateau de tuiles", "5"),
-  Exercise("Image découpée", "5_2"),
-  Exercise("Plateau variable", "5_3"),
-  Exercise("Animer un plateau", "6"),
-  Exercise("Inverser des cases","6_2"),
+const List<Exercice> exercices = [
+  Exercice("Simple image", "1"),
+  Exercice("Transformer une image", "2"),
+  Exercice("Affichage d'une tuile", "4"),
+  Exercice("Plateau de tuiles", "5"),
+  Exercice("Image découpée", "5_2"),
+  Exercice("Plateau variable", "5_3"),
+  Exercice("Animer un plateau", "6"),
+  Exercice("Inverser des cases","6_2"),
+  Exercice("Jeu de Taquin final","7")
 ];
 
+class WidgetExercice extends StatefulWidget {
+  const WidgetExercice({Key? key, required this.title}) : super(key: key);
+  final String title;
+  @override
+  State<WidgetExercice> createState() => _WidgetExercice();
+}
+class _WidgetExercice extends State<WidgetExercice> {
+  @override
+  Widget build(BuildContext context) {
+    Exercice exTmp=exercices.firstWhere((e) => e.titre == widget.title);
+    for (var i in exercices){
+      if(i.titre==widget.title){
+        exTmp=i;
+      }
+    }
+    if(exTmp.numero=="1")return Exercice1(title:widget.title);
+    if(exTmp.numero=="2")return Exercice2(title:widget.title);
+    if(exTmp.numero=="4")return Exercice4(title:widget.title);
+    if(exTmp.numero=="5")return Exercice5(title:widget.title);
+    if(exTmp.numero=="5_2")return Exercice5_2(title:widget.title);
+    if(exTmp.numero=="5_3")return Exercice5_3(title:widget.title);
+    if(exTmp.numero=="6")return Exercice6(title:widget.title);
+    if(exTmp.numero=="6_2")return Exercice6_2(title:widget.title);
+    return Exercice7(title:widget.title);
+  }
+}
 void main() {
   runApp(const MyApp());
 }
@@ -37,20 +64,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'tp2',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
+    
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Selection des exercices'),
     );
   }
 }
@@ -58,14 +78,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -84,18 +96,19 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: ListView.builder(
         padding: const EdgeInsets.only(top:5,bottom:5),
-        itemCount: exercises.length,
+        itemCount: exercices.length,
         itemBuilder: (context, index){
           return Card(
             child: ListTile(
-              leading: Text(exercises[index].number),
-              title: Text(exercises[index].title),
+              leading: Text(exercices[index].numero),
+              title: Text(exercices[index].titre),
               trailing: const Icon(Icons.arrow_forward_ios_rounded,),
               onTap:(){
                   Navigator.push(
                   context, 
                   MaterialPageRoute(
-                    builder: (context) => Exercice7(title: "test")
+                    
+                    builder: (context) => WidgetExercice(title:exercices[index].titre)
                   ),
                 );
                

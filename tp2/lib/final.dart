@@ -69,41 +69,70 @@ class _Exercice7State extends State<Exercice7>{
             appBar: topBar(),
             body: 
             Center(
-                child: Column(
-                    children:<Widget>[
-                            Expanded(
-                                child:
-                                Container(
-                                padding: const EdgeInsets.all(10),
-                                child:GridView.builder(
-                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:nbdiv),
-                                    itemCount: tiles.length,
-                                    itemBuilder:(context,index){
-                                        return InkWell(
-                                            child:Container(
-                                                padding:const EdgeInsets.all(1),
-                                                child:TileWidget(tile:tiles[index]),
-                                            ),
-                                            onTap:(){
-                                                setState((){
-                                                    if (playing)echange(index);
-                                                    if(jeuFini())playing=false;
-                                                    
+                child:Expanded(
+                    child:Column(
+                        children:<Widget>[
+                                Expanded(
+                                    child:
+                                    Container(
+                                    padding: const EdgeInsets.all(10),
+                                    child:GridView.builder(
+                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:nbdiv),
+                                        itemCount: tiles.length,
+                                        itemBuilder:(context,index){
+                                            return InkWell(
+                                                child:Container(
+                                                    padding:const EdgeInsets.all(1),
+                                                    child:TileWidget(tile:tiles[index]),
+                                                ),
+                                                onTap:(){
+                                                    setState((){
+                                                        if (playing)echange(index);
+                                                        if(jeuFini()&& playing){
+                                                            playing=false;
+                                                            showDialog(
+                                                                context: context,
+                                                                builder: (BuildContext context) => _buildPopupDialog(context),
+                                                            );
+                                                        }
+                                                        
 
-                                                });
-                                            },
-                                        );
-                                    }
+                                                    });
+                                                },
+                                            );
+                                        }
+                                    )
                                 )
-                            )
-                        ),
-                        
-                    ]
+                            ),
+                            
+                        ]
+                    )
                 )
                 
             ),
             bottomNavigationBar:bottomBar()
             
+        );
+    }
+    Widget _buildPopupDialog(BuildContext context) {
+        return new AlertDialog(
+            title: const Text('Partie Gagnée'),
+            content: new Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+                Text("Bravo, vous avez gagné la partie de difficulté $nbMouvChoix en $nbMouvFait mouvements"),
+            ],
+            ),
+            actions: <Widget>[
+            new FlatButton(
+                onPressed: () {
+                Navigator.of(context).pop();
+                },
+                textColor: Theme.of(context).primaryColor,
+                child: const Text('Retour au menu'),
+            ),
+            ],
         );
     }
 
@@ -130,21 +159,21 @@ class _Exercice7State extends State<Exercice7>{
         }
     }
     bool switchable(int i){
-    if(i==indexactif+1 && i%nbdiv!=0){
-        return true;
+        if(i==indexactif+1 && i%nbdiv!=0){
+            return true;
 
-    }
-    else if (i==indexactif-1 && i%nbdiv!=nbdiv-1){
-        return true;
+        }
+        else if (i==indexactif-1 && i%nbdiv!=nbdiv-1){
+            return true;
 
-    }
-    else if (i==indexactif+nbdiv && indexactif<=(nbdiv-1)*nbdiv-1){
-        return true;
-    }
-    else if(i==indexactif-nbdiv && indexactif>=nbdiv){
-        return true;
-    }
-    return false;
+        }
+        else if (i==indexactif+nbdiv && indexactif<=(nbdiv-1)*nbdiv-1){
+            return true;
+        }
+        else if(i==indexactif-nbdiv && indexactif>=nbdiv){
+            return true;
+        }
+        return false;
 
     }
     void echange(int i){
@@ -194,16 +223,18 @@ class _Exercice7State extends State<Exercice7>{
     }
 
     bool jeuFini(){
-        if(indexactif==solvedIndex){
-            if(tiles==solvedTiles){
-                print("oui");
-                return true;
+        int index = 0;
+        for (int i = 0; i<nbdiv; i++){
+            for (int j = 0; j<nbdiv; j++){
+                if (tiles[index].alignment != Alignment(-1+2*j/(nbdiv-1), -1+2*i/(nbdiv-1))){
+                return false;
+                }
+                index++;
             }
         }
-        
-        print("non");
-        return false;
+        return true;
     }
+    
     Text titleTopBar(){
 
         if(!playing){
@@ -327,10 +358,10 @@ class _Exercice7State extends State<Exercice7>{
                                             
                                             solvedIndex=indexactif;
                                             solvedTiles=tiles;
-                                            shuffle();
+                                            
+                                            while(jeuFini())shuffle();
                                             nbMouvFait=0;
                                             actuListeTiles();
-                                            print(solvedIndex);
                                         });
                                     },
                                     label: const Text('Jouer'),
@@ -358,7 +389,7 @@ class _Exercice7State extends State<Exercice7>{
                                 FloatingActionButton.extended(
                                     onPressed: () {
                                         setState(() {
-                                            reverse();
+                                            if(nbMouvFait!=0)reverse();
                                         });
                                     },
                                     label: const Text('Reverse'),
