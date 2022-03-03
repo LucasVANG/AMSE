@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 import 'dart:math' ;
 
+List<String> listAssets=[
+    'assets/images/OnePunchMan2.jpeg',
+    'assets/images/OnePiece2.jpeg',
+    'assets/images/Akame2.jpeg',
+    'assets/images/Nichijo2.jpeg',
+    'assets/images/Gintama2.jpeg',
+    'assets/images/Durarara2.jpeg',
+    'assets/images/MHA2.jpeg',
+    'assets/images/Vinland2.jpg'
+];
+
 class Exercice7 extends StatefulWidget {
   const Exercice7({Key? key,required this.title}) : super(key: key);
   final String title;
@@ -15,17 +26,25 @@ class Tile{
     Tile(this.imageURL,this.status,this.alignment,this.rapport);
 }
 
+
 class TileWidget extends StatelessWidget{
-    const TileWidget({Key? key,required this.tile}) : super(key:key);
+    TileWidget({Key? key,required this.tile}) : super(key:key);
     final Tile tile;
+    Image choixIm= Image.network('https://picsum.photos/512');
+    
     @override
     Widget build(BuildContext context){
+        if(tile.imageURL.contains("assets")){
+            choixIm=Image.asset(tile.imageURL);
+        }
+
         if(tile.status==2){
             return tileActive(tile);
         }
         else{
             return tileNonActive(tile);
         }
+
     }
 
     Widget tileActive(Tile tile){
@@ -42,7 +61,7 @@ class TileWidget extends StatelessWidget{
                     alignment: tile.alignment,
                     widthFactor: tile.rapport,
                     heightFactor: tile.rapport,
-                    child: Image.network(tile.imageURL),
+                    child: choixIm,
                 ),
                 ),
             ),
@@ -62,6 +81,7 @@ class _Exercice7State extends State<Exercice7>{
     int nbMouvFait=0;
     bool reversed=false;
     int flagReverse=0;
+    String image='assets/images/OnePiece2.jpeg';
     @override
     Widget build(BuildContext context){
         actuListeTiles();
@@ -114,6 +134,39 @@ class _Exercice7State extends State<Exercice7>{
             
         );
     }
+
+    Widget Selection (){
+    
+        return Scaffold(
+            appBar: AppBar(
+                title: Text("Choix de l'image"),
+                centerTitle: true,
+            ),
+            body: Center(
+                child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:(listAssets.length/3).toInt()+1),
+                    itemCount: listAssets.length,
+                    itemBuilder:(context,index){
+                        return InkWell(
+                        child:Container(
+                            padding:const EdgeInsets.all(1),
+                            child:Image.asset(listAssets[index]),
+                            ),
+                            onTap:(){
+                                setState((){
+                                    image=listAssets[index];
+                                    actuListeTiles();
+                                });
+                            },
+                        
+                        );
+                    }
+                                    
+                )
+            )
+        );
+    }
+
     Widget _buildPopupDialog(BuildContext context) {
         return new AlertDialog(
             title: const Text('Partie Gagnée'),
@@ -140,7 +193,7 @@ class _Exercice7State extends State<Exercice7>{
         if(tiles.isEmpty){
             for (int i=0;i<nbdiv;i++){
           for (int j=0;j<nbdiv;j++){
-              tiles.add(Tile('https://picsum.photos/512',0,Alignment(-1+2*j/(nbdiv-1),-1+2*i/(nbdiv-1)),1/nbdiv));
+              tiles.add(Tile(image,0,Alignment(-1+2*j/(nbdiv-1),-1+2*i/(nbdiv-1)),1/nbdiv));
 
           }
       }
@@ -321,6 +374,7 @@ class _Exercice7State extends State<Exercice7>{
             ],
         );
     }
+
     
     Widget bottomBar(){
         return BottomAppBar(
@@ -380,6 +434,39 @@ class _Exercice7State extends State<Exercice7>{
                                         });
                                     },
                                     label: const Text('+'),
+                                    backgroundColor: Colors.blue,
+                                )
+                            )
+                        ),
+                        if (!playing)Expanded(child:
+                            Container(child:
+                                FloatingActionButton.extended(
+                                    onPressed: () {
+                                        Navigator.push(
+                                            context, 
+                                            MaterialPageRoute(
+                                                
+                                                builder: (context) => Selection()
+                                            ),
+                                        );
+                                        
+                                    },
+                                    label: const Text('Choix Image'),
+                                    backgroundColor: Colors.blue,
+                                )
+                            )
+                        ),
+                        if (!playing)Expanded(child:
+                            Container(child:
+                                FloatingActionButton.extended(
+                                    onPressed: () {
+                                        setState((){
+                                            image='https://picsum.photos/512';
+                                            actuListeTiles();
+                                        });
+                                        
+                                    },
+                                    label: const Text('Image Aléatoire'),
                                     backgroundColor: Colors.blue,
                                 )
                             )
